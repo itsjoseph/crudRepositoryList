@@ -1,7 +1,9 @@
 package org.jalgp.poointerfaces.repositorio;
 
 import org.jalgp.poointerfaces.modelo.Cliente;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ClienteListRepositorio implements CrudRepositorio, OrdenableRepositorio, PaginableRepositorio {
@@ -14,17 +16,34 @@ public class ClienteListRepositorio implements CrudRepositorio, OrdenableReposit
 
     @Override
     public List<Cliente> listar(int desde, int hasta) {
-        return null;
+        return dataSource.subList(desde, hasta);
     }
 
     @Override
     public List<Cliente> listar(String campo, Direccion dir) {
-        return null;
+        this.dataSource.sort((a, b) -> {
+            int resultado = 0;
+            if (dir == Direccion.ASC) {
+                switch (campo) {
+                    case "id" -> resultado = a.getId().compareTo(b.getId());
+                    case "nombre" -> resultado = a.getId().compareTo(b.getId());
+                    case "apellido" -> resultado = a.getId().compareTo(b.getId());
+                }
+            } else if (dir == Direccion.DESC) {
+                switch (campo) {
+                    case "id" -> resultado = b.getId().compareTo(a.getId());
+                    case "nombre" -> resultado = b.getId().compareTo(a.getId());
+                    case "apellido" -> resultado = b.getId().compareTo(a.getId());
+                }
+            }
+            return resultado;
+        });
+        return dataSource;
     }
 
     @Override
     public List<Cliente> listar() {
-        return dataSource.sort();
+        return dataSource;
     }
 
     @Override
